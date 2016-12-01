@@ -25,11 +25,11 @@ RUN apt-get install -y openjdk-8-jre
 
 # 2.0.1rc3 this is the newest version of nltk that seems to work with HILDA. 
 # We don't install this via pip because this version chokes on the version
-# of 'distribute' it requires (0.6.21).
+# of 'distribute' it requires (0.6.21). We only clone the specific tag,
+# because cloning the complete history takes a long time.
 WORKDIR /opt
-RUN git clone https://github.com/nltk/nltk
+RUN git clone -b '2.0.1rc3' --single-branch --depth 1 https://github.com/nltk/nltk.git
 WORKDIR /opt/nltk
-RUN git checkout tags/2.0.1rc3 -b nltk-2.0.1rc3
 
 # installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
 # but we'll need it to install pyyaml
