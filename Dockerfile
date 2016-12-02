@@ -2,7 +2,8 @@ FROM nlpbox/nlpbox-base:16.04
 MAINTAINER Arne Neumann <nlpbox.programming@arne.cl>
 
 RUN apt-get update -y && apt-get upgrade -y && \
-    apt-get install -y gcc g++ make python-pip
+    apt-get install -y gcc g++ make python-pip openjdk-8-jre && \
+    apt-get remove -y python-setuptools
 
 # We can't distribute the HILDA parser.
 #
@@ -20,9 +21,6 @@ RUN make clean && make
 WORKDIR /opt/hilda/svm_tools/libsvm
 RUN make clean && make
 
-RUN pip install pudb ipython
-RUN apt-get install -y openjdk-8-jre
-
 # 2.0.1rc3 this is the newest version of nltk that seems to work with HILDA. 
 # We don't install this via pip because this version chokes on the version
 # of 'distribute' it requires (0.6.21). We only clone the specific tag,
@@ -33,10 +31,8 @@ WORKDIR /opt/nltk
 
 # installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
 # but we'll need it to install pyyaml
-RUN apt-get remove -y python-setuptools
-RUN python setup.py install
-
-RUN pip install setuptools==30.0.0 && pip install pyyaml==3.12
+RUN python setup.py install && \
+    pip install setuptools==30.0.0 && pip install pyyaml==3.12
 
 WORKDIR /opt/hilda
 ENTRYPOINT ["python", "hilda.py"]
