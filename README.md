@@ -21,7 +21,7 @@ docker build -t hilda .
 ## Running HILDA
 
 To test if parser works, just run ``docker run -ti hilda``.
-To run the parser on a file on the file ``/tmp/input.txt`` on your
+To run the parser on the file ``/tmp/input.txt`` on your
 local machine, run:
 
 ```
@@ -34,4 +34,5 @@ be marked with ``<s>`` and each paragraph ending with ``<p>``.
 
 # Citation
 
-Hernault, H., Prendinger, H., DuVerle, D. A., Ishizuka, M., & Paek, T. (2010). [HILDA: a discourse parser using support vector machine classification](http://journals.linguisticsociety.org/elanguage/dad/article/download/591/591-2300-1-PB.pdf). Dialogue and Discourse, 1(3), 1-33.
+Hernault, H., Prendinger, H., DuVerle, D. A., Ishizuka, M., & Paek, T. (2010).  
+[HILDA: a discourse parser using support vector machine classification](http://journals.linguisticsociety.org/elanguage/dad/article/download/591/591-2300-1-PB.pdf). Dialogue and Discourse, 1(3), 1-33.
