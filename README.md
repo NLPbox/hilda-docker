@@ -25,7 +25,7 @@ To run the parser on the file ``/tmp/input.txt`` on your
 local machine, run:
 
 ```
-docker -v /tmp:/tmp -ti hilda-parser /tmp/input.txt
+docker run -v /tmp:/tmp -ti hilda-parser /tmp/input.txt
 ```
 
 The input files should be encoded in UTF-8. Each sentence ending must
