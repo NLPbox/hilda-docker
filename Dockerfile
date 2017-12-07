@@ -29,6 +29,11 @@ WORKDIR /opt
 RUN git clone -b '2.0.1rc3' --single-branch --depth 1 https://github.com/nltk/nltk.git
 WORKDIR /opt/nltk
 
+# installing nltk-2.0.1rc3 would fail with "urllib2.HTTPError: HTTP Error 403: SSL is required"
+# because it is trying to download "distribute" using HTTP instead of HTTPS
+RUN sed -i 's/http/https/g' distribute_setup.py
+
+
 # installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
 # but we'll need it to install pyyaml
 RUN python setup.py install && \
