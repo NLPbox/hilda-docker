@@ -39,6 +39,8 @@ RUN sed -i 's/http/https/g' distribute_setup.py
 RUN python setup.py install && \
     pip install setuptools==30.0.0 && pip install pyyaml==3.12
 
+ADD hilda.sh /opt/hilda
+
 WORKDIR /opt/hilda
-ENTRYPOINT ["python", "hilda.py"]
+ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]
