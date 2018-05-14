@@ -1,3 +1,4 @@
 #!/bin/bash
-python hilda.py $1 > $1.hilda
-cat $1.hilda
+python hilda.py -o $1
+cat $1.edus
+cat $1.tree

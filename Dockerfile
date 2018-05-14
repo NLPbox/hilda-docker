@@ -35,11 +35,12 @@ RUN sed -i 's/http/https/g' distribute_setup.py
 
 
 # installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
-# but we'll need it to install pyyaml
+# but we'll need it to install pyyaml.
+# pytest and sh are only needed to run the test.
 RUN python setup.py install && \
-    pip install setuptools==30.0.0 && pip install pyyaml==3.12
+    pip install setuptools==30.0.0 && pip install pyyaml==3.12 pytest==3.5.1 sh==1.12.14
 
-ADD hilda.sh /opt/hilda
+ADD hilda.sh input_*.txt test_hilda.py /opt/hilda/
 
 WORKDIR /opt/hilda
 ENTRYPOINT ["./hilda.sh"]
