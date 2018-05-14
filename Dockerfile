@@ -42,6 +42,12 @@ RUN python setup.py install && \
 
 ADD hilda.sh input_*.txt test_hilda.py /opt/hilda/
 
+# TODO: move this further up
+# stuff needed to "draw the tree"
+RUN apt-get install python-tk xvfb -y
+
+
+
 WORKDIR /opt/hilda
 ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]
