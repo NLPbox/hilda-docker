@@ -40,8 +40,11 @@ RUN sed -i 's/http/https/g' distribute_setup.py
 RUN python setup.py install && \
     pip install setuptools==30.0.0 && pip install pyyaml==3.12 pytest==3.5.1 sh==1.12.14
 
-ADD hilda.sh input_*.txt test_hilda.py /opt/hilda/
-
 WORKDIR /opt/hilda
+ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
+
+# minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
+RUN sed -i 's/return 0/return pt/g' hilda.py
+
 ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]

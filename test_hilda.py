@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # Author: Arne Neumann <nlpbox.programming@arne.cl>
 
@@ -13,6 +13,8 @@ EXPECTED_TREE = """(Contrast[S][N]
   Although they did n't like it ,
   they accepted the offer .)"""
 
+EXPECTED_PARSETREE = """ParseTree('Contrast[S][N]', ["Although they did n't like it ,", 'they accepted the offer .'])"""
+
 def test_hilda():
     """The HILDA parser produces the expected output."""
     parser = sh.Command('./hilda.sh')
@@ -25,3 +27,7 @@ def test_hilda():
     with open('input_short.txt.tree') as edu_file:
         tree_str = edu_file.read()
         assert tree_str == EXPECTED_TREE, result.stderr.encode('utf-8')
+
+    with open('input_short.txt.parsetree') as edu_file:
+        parsetree_str = edu_file.read()
+        assert parsetree_str == EXPECTED_PARSETREE, result.stderr.encode('utf-8')
