@@ -33,14 +33,36 @@ WORKDIR /opt/nltk
 # because it is trying to download "distribute" using HTTP instead of HTTPS
 RUN sed -i 's/http/https/g' distribute_setup.py
 
-
 # installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
 # but we'll need it to install pyyaml.
 # pytest and sh are only needed to run the test.
 RUN python setup.py install && \
     pip install setuptools==30.0.0 && pip install pyyaml==3.12 pytest==3.5.1 sh==1.12.14
 
-ADD hilda.sh input_*.txt test_hilda.py /opt/hilda/
+# we need discoursegraphs for conversion to .rs3
+WORKDIR /opt
+RUN git clone https://github.com/arne-cl/discoursegraphs.git
+
+# discoursegraphs needs to be installed in a virtualenv, because it needs a newer
+# version of nltk. We need to replace 'sh' with 'bash' to make virtualenv work.
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /opt/discoursegraphs
+RUN apt-get install -y python-dev python-pip git graphviz graphviz-dev \
+    libxml2-dev libxslt-dev && rm -rf /var/lib/apt/lists/* && \
+    pip2 install virtualenvwrapper==4.8.2 && \
+    echo "export WORKON_HOME=$HOME/.virtualenvs" > ~/.profile && \
+    echo "source /usr/local/bin/virtualenvwrapper.sh" > ~/.profile && \
+    source ~/.profile && \
+    mkvirtualenv -p python2.7 discoursegraphs
+
+# on current Ubuntu systems you will need to install pygraphviz manually,
+# cf. http://stackoverflow.com/questions/32885486/pygraphviz-importerror-undefined-symbol-agundirected
+RUN source ~/.profile && workon discoursegraphs && pip2 install pygraphviz==1.3.1 \
+    --install-option="--include-path=/usr/include/graphviz" \
+    --install-option="--library-path=/usr/lib/graphviz/" && \
+    pip2 install -r requirements.txt && deactivate
+
 
 # TODO: move this further up
 # stuff needed to "draw the tree"
@@ -49,5 +71,11 @@ RUN apt-get install python-tk xvfb -y
 
 
 WORKDIR /opt/hilda
+ADD hilda.sh hilda_wrapper.py hilda2rs3.py hilda2rs3.sh input_*.txt test_hilda.py /opt/hilda/
+
+# minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
+RUN sed -i 's/return 0/return pt/g' hilda.py
+
+
 ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]
