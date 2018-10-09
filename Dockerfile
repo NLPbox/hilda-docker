@@ -1,9 +1,7 @@
-FROM nlpbox/nlpbox-base:16.04
-MAINTAINER Arne Neumann <nlpbox.programming@arne.cl>
+FROM alpine:3.8 as builder
 
-RUN apt-get update -y && apt-get upgrade -y && \
-    apt-get install -y gcc g++ make python-pip openjdk-8-jre && \
-    apt-get remove -y python-setuptools
+RUN apk update && \
+    apk add git python2 py2-pip gcc g++ make openjdk8-jre-base
 
 # We can't distribute the HILDA parser.
 #
@@ -36,8 +34,10 @@ RUN sed -i 's/http/https/g' distribute_setup.py
 # installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
 # but we'll need it to install pyyaml.
 # pytest and sh are only needed to run the test.
-RUN python setup.py install && \
-    pip install setuptools==30.0.0 && pip install pyyaml==3.12 pytest==3.5.1 sh==1.12.14
+RUN pip install pyyaml==3.12 pytest==3.5.1 sh==1.12.14 && \
+    apk del py-setuptools py2-pip && \
+    python setup.py install
+
 
 WORKDIR /opt/hilda
 ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
@@ -45,6 +45,8 @@ ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
 # minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
 RUN sed -i 's/return 0/return pt/g' hilda.py
 
+# TODO: remove if hilda.sh could work with /bin/sh
+RUN apk add bash
 
 ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]
