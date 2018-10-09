@@ -6,8 +6,9 @@ import sys
 from hilda import main
 
 """
-Simple wrapper around hilda.py that outputs parse tree in a string format
-that can easily be parsed into nltk.tree.ParentedTree objects.
+Simple wrapper around The original hilda.py (Hernault et al. 2010) that
+outputs parse tree in a string format that can easily be parsed into
+nltk.tree.ParentedTree objects.
 """
 
 if __name__ == "__main__":
