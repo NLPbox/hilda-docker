@@ -9,12 +9,6 @@ RUN apk update && apk add git gcc g++ make
 # Please contact Prof. Helmut Prendinger <helmut@nii.ac.jp>
 ADD hilda_0.9.5_full.tar.gz /opt/hilda/
 
-WORKDIR /opt/hilda
-ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
-
-# minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
-RUN sed -i 's/return 0/return pt/g' hilda.py
-
 WORKDIR /opt/hilda/svm_tools
 RUN gcc -o svm-scale svm-scale.c
 
@@ -36,6 +30,11 @@ RUN git clone -b '2.0.1rc3' --single-branch --depth 1 https://github.com/nltk/nl
 WORKDIR /opt/hilda/nltk
 RUN sed -i 's/http/https/g' distribute_setup.py
 
+WORKDIR /opt/hilda
+ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
+
+# minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
+RUN sed -i 's/return 0/return pt/g' hilda.py
 
 
 # keep only the stuff we need to run (and test) HILDA
