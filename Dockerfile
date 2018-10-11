@@ -45,8 +45,5 @@ ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
 # minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
 RUN sed -i 's/return 0/return pt/g' hilda.py
 
-# TODO: remove if hilda.sh could work with /bin/sh
-RUN apk add bash
-
 ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]
