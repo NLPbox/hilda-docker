@@ -34,7 +34,8 @@ WORKDIR /opt/hilda
 ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
 
 # minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
-RUN sed -i 's/return 0/return pt/g' hilda.py
+RUN sed -i 's/print out/#print out/g' hilda.py && \
+    sed -i 's/return 0/return pt/g' hilda.py
 
 
 # keep only the stuff we need to run (and test) HILDA
@@ -48,12 +49,15 @@ RUN apk update && \
 WORKDIR /opt/hilda
 COPY --from=builder /opt/hilda .
 
-# installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
+# Installing nltk-2.0.1rc3 does not seem to work when setuptools is installed,
 # but we'll need it to install pyyaml.
+# Afterwards, we'll install nltk's punkt tokenizer, as HILDA only accepts
+# sentence-split input (with sentence endings marked as '<s>').
 WORKDIR /opt/hilda/nltk
-RUN apk del py-setuptools py2-pip && python setup.py install
+RUN apk del py-setuptools py2-pip && \
+    python setup.py install && \
+    python -c "import nltk; dl = nltk.downloader.Downloader('https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/index.xml'); dl.download('punkt')"
 
 WORKDIR /opt/hilda
-
 ENTRYPOINT ["./hilda.sh"]
 CMD ["texts/szeryng_wikipedia.txt"]
