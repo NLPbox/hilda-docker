@@ -31,7 +31,7 @@ WORKDIR /opt/hilda/nltk
 RUN sed -i 's/http/https/g' distribute_setup.py
 
 WORKDIR /opt/hilda
-ADD hilda.sh hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
+ADD hilda_wrapper.py input_*.txt test_hilda.py /opt/hilda/
 
 # minimal modification to the original HILDA parser to work with parse trees as nltk Tree objects
 RUN sed -i 's/print out/#print out/g' hilda.py && \
@@ -44,7 +44,7 @@ FROM alpine:3.8
 # pyyaml is needed for nltk, pytest and sh are only needed to run the test.
 RUN apk update && \
     apk add git python2 py2-pip openjdk8-jre-base && \
-    pip install pyyaml==3.12 pytest==3.5.1 sh==1.12.14
+    pip install pyyaml==3.12 pytest==3.5.1
 
 WORKDIR /opt/hilda
 COPY --from=builder /opt/hilda .

@@ -1,13 +1,5 @@
 #!/usr/bin/env python2
 
-import codecs
-import sys
-import tempfile
-
-from hilda import main
-import nltk
-
-
 """
 Simple wrapper around the original hilda.py (Hernault et al. 2010) that
 outputs parse tree in a string format that can easily be parsed into
@@ -23,6 +15,13 @@ What we actually want:
 
 ParseTree('Contrast[S][N]', ["Although they did n't like it ,", 'they accepted the offer .'])
 """
+
+import sys
+import tempfile
+
+from hilda import main
+import nltk
+
 
 SENT_DETECTOR = nltk.data.load('tokenizers/punkt/english.pickle')
 
@@ -48,7 +47,7 @@ def parse_file(input_filepath):
 
 
 if __name__ == "__main__":
-    input_filepath = sys.argv[-1]
-    result = parse_file(input_filepath)
-    sys.stdout.write(result)
+    INPUT = sys.argv[-1]
+    OUTPUT = parse_file(INPUT)
+    sys.stdout.write(OUTPUT)
     sys.stdout.write("\n")

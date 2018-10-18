@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Arne Neumann <nlpbox.programming@arne.cl>
 
-import sh
-import sys
+"""
+Tests for the HILDA RST parser and our preprocessor/wrapper
+hilda_wrapper.py.
+"""
+
 import pytest
 
 from hilda_wrapper import parse_file
@@ -14,8 +17,6 @@ EXPECTED_PARSETREE_LONG = """ParseTree('Joint[N][N]', [ParseTree('Joint[N][N]', 
 
 def test_hilda():
     """The HILDA parser produces the expected output."""
-    import pudb; pudb.set_trace()
-
     result = parse_file('input_short.txt')
     assert result == EXPECTED_PARSETREE_SHORT
 
