@@ -59,5 +59,5 @@ RUN apk del py-setuptools py2-pip && \
     python -c "import nltk; dl = nltk.downloader.Downloader('https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/index.xml'); dl.download('punkt')"
 
 WORKDIR /opt/hilda
-ENTRYPOINT ["./hilda.sh"]
-CMD ["texts/szeryng_wikipedia.txt"]
+ENTRYPOINT ["./hilda_wrapper.py"]
+CMD ["input_long.txt"]
