@@ -4,4 +4,4 @@
 # as HILDA's license doesn't allow that.
 
 docker build -t hilda .
-docker run --entrypoint=pytest "-vv" -ti hilda test_hilda.py
+docker run --entrypoint=pytest -ti hilda test_hilda.py "-vv"
